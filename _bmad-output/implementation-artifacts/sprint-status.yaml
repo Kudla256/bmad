@@ -1,0 +1,58 @@
+# generated: 2026-02-27
+# project: Securer
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Mark epic as 'in-progress' when starting work on its first story
+# - SM typically creates next story ONLY after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
+
+generated: 2026-02-27
+project: Securer
+project_key: NOKEY
+tracking_system: file-system
+story_location: "_bmad-output/implementation-artifacts"
+
+development_status:
+  epic-1: backlog
+  1-1-project-foundation-and-data-layer: backlog
+  1-2-encryption-service-and-secret-creation-api: backlog
+  1-3-sender-page-layout-and-form: backlog
+  1-4-secret-creation-flow-and-success: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-reveal-api-endpoint: backlog
+  2-2-recipient-password-prompt-and-verification: backlog
+  2-3-confirmation-reveal-and-password-in-link: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-brute-force-protection-and-attempt-tracking: backlog
+  3-2-auto-expiration-and-uniform-error-handling: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-docker-and-azure-deployment: backlog
+  epic-4-retrospective: optional
