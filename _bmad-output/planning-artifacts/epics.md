@@ -5,9 +5,10 @@ stepsCompleted:
   - step-03-create-stories
   - step-04-final-validation
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd.md
-  - _bmad-output/planning-artifacts/architecture.md
-  - _bmad-output/planning-artifacts/ux-design-specification.md
+  - _bmad-output/planning-artifacts/prds/prd-Securer-2026-02-13/prd.md
+  - _bmad-output/planning-artifacts/architecture/architecture-Securer-2026-02-13/ARCHITECTURE-SPINE.md
+  - _bmad-output/planning-artifacts/ux-designs/ux-Securer-2026-02-13/DESIGN.md
+  - _bmad-output/planning-artifacts/ux-designs/ux-Securer-2026-02-13/EXPERIENCE.md
 ---
 
 # Securer - Epic Breakdown
@@ -16,70 +17,81 @@ inputDocuments:
 
 This document provides the complete epic and story breakdown for Securer, decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
 
+Requirement ids (`FR-`, `NFR-`) are owned by the PRD; architecture decision ids (`AD-`) by the architecture spine; design tokens by `DESIGN.md`. This document references them and does not redefine them.
+
 ## Requirements Inventory
 
 ### Functional Requirements
 
-**Secret Creation (FR1-FR7):**
-- FR1: Sender can input secret text content into a text field
-- FR2: Sender can select an expiration period (1 hour, 24 hours, 7 days)
-- FR3: Sender can provide a password required to access the secret
-- FR4: Sender can generate a random password via the UI instead of typing one manually
-- FR5: Sender can optionally include the password in the generated link (via URL fragment)
-- FR6: Sender can generate a unique, shareable link for the created secret
-- FR7: Sender receives the generated link automatically copied to their clipboard
+**Secret Creation (FR-1 to FR-7):**
+- FR-1: Sender can input secret text content into a text field
+- FR-2: Sender can select an expiration period (1 hour, 24 hours, 7 days)
+- FR-3: Sender can provide a password required to access the secret
+- FR-4: Sender can generate a random password via the UI instead of typing one manually
+- FR-5: Sender can optionally include the password in the generated link (via URL fragment)
+- FR-6: Sender can generate a unique, shareable link for the created secret
+- FR-7: Sender receives the generated link automatically copied to their clipboard
 
-**Secret Retrieval (FR8-FR12):**
-- FR8: Recipient can open a secret link and be prompted for a password
-- FR9: Recipient with a password-in-link URL can access the secret without a separate password prompt
-- FR10: Recipient can view a confirmation warning before the secret is revealed
-- FR11: Recipient can view the decrypted secret content after providing the correct password and confirming
-- FR12: Recipient can copy the revealed secret content
+**Secret Retrieval (FR-8 to FR-12):**
+- FR-8: Recipient can open a secret link and be prompted for a password
+- FR-9: Recipient with a password-in-link URL can access the secret without a separate password prompt
+- FR-10: Recipient can view a confirmation warning before the secret is revealed
+- FR-11: Recipient can view the decrypted secret content after providing the correct password and confirming
+- FR-12: Recipient can copy the revealed secret content
 
-**Secret Lifecycle (FR13-FR16):**
-- FR13: System destroys the secret immediately after it has been viewed once
-- FR14: System destroys unclaimed secrets automatically when their expiration period elapses
-- FR15: System destroys the secret after the maximum number of failed password attempts is reached
-- FR16: System tracks remaining password attempts per secret
+**Secret Lifecycle (FR-13 to FR-16):**
+- FR-13: System destroys the secret immediately after it has been viewed once
+- FR-14: System destroys unclaimed secrets automatically when their expiration period elapses
+- FR-15: System destroys the secret after the maximum number of failed password attempts is reached
+- FR-16: System tracks remaining password attempts per secret
 
-**Security & Encryption (FR17-FR20):**
-- FR17: System encrypts secret content server-side using the sender-provided password before storing
-- FR18: System stores only encrypted ciphertext - plaintext never persists in storage
-- FR19: System decrypts secret content in memory only at the moment of authorized retrieval
-- FR20: System discards plaintext and password from memory immediately after encryption or decryption
+**Security & Encryption (FR-17 to FR-20):**
+- FR-17: System encrypts secret content server-side using the sender-provided password before storing
+- FR-18: System stores only encrypted ciphertext - plaintext never persists in storage
+- FR-19: System decrypts secret content in memory only at the moment of authorized retrieval
+- FR-20: System discards plaintext and password from memory immediately after encryption or decryption
 
-**Error Handling (FR21-FR22):**
-- FR21: System displays an identical generic message for all failure states (expired, viewed, burned, nonexistent)
-- FR22: System reveals no information about whether a secret ever existed, was already viewed, or was destroyed
+**Error Handling (FR-21 to FR-22):**
+- FR-21: System displays an identical generic message for all failure states (expired, viewed, burned, nonexistent)
+- FR-22: System reveals no information about whether a secret ever existed, was already viewed, or was destroyed
 
-**Deployment (FR23-FR24):**
-- FR23: Administrator can deploy the application using a single `docker-compose up` command
-- FR24: Administrator can configure basic settings (port, database) via environment variables
+**Deployment (FR-23 to FR-24):**
+- FR-23: Administrator can deploy the application using a single `docker-compose up` command
+- FR-24: Administrator can configure basic settings (port, database) via environment variables
 
 ### NonFunctional Requirements
 
+Cross-cutting NFRs are owned by PRD section 5 and carry stable `NFR-` ids there. Reproduced here as the coverage inventory.
+
 **Performance:**
-- NFR1: Page load time under 1 second on standard broadband connections
-- NFR2: Secret creation (encryption + storage) completes in under 500ms server-side
-- NFR3: Secret retrieval (decryption + delivery) completes in under 500ms server-side
-- NFR4: UI remains responsive during link generation (no blocking operations on the client)
-- NFR5: Minimal JS bundle size
+- NFR-1: Page load time under 1 second on standard broadband connections
+- NFR-2: Secret creation (encryption + storage) completes in under 500ms server-side
+- NFR-3: Secret retrieval (decryption + delivery) completes in under 500ms server-side
+- NFR-4: UI remains responsive during link generation (no blocking operations on the client)
+- NFR-5: Minimal JS bundle size
 
 **Security:**
-- NFR6: All client-server communication over TLS (HTTPS only)
-- NFR7: No logging of secret content, passwords, or decrypted data at any point
-- NFR8: No logging of request bodies on secret creation or retrieval endpoints
-- NFR9: Encryption keys (user passwords) never written to disk, logs, or persistent storage
-- NFR10: Failed password attempts do not reveal whether the secret exists
-- NFR11: URL fragments (password-in-link mode) are never sent to the server by the browser
+- NFR-6: All client-server communication over TLS (HTTPS only)
+- NFR-7: No logging of secret content, passwords, or decrypted data at any point
+- NFR-8: No logging of request bodies on secret creation or retrieval endpoints
+- NFR-9: Encryption keys (user passwords) never written to disk, logs, or persistent storage
+- NFR-10: Failed password attempts do not reveal whether the secret exists
+- NFR-11: URL fragments (password-in-link mode) are never sent to the server by the browser
+
+**Reliability:**
+- NFR-12: Destruction is authoritative — once a destruction trigger fires, no later request may observe the secret, regardless of storage cleanup timing
+- NFR-13: A reveal either delivers the secret and destroys the record, or does neither — a displayed secret must never survive
 
 **Scalability:**
-- NFR12: System supports thousands of concurrent users worldwide
-- NFR13: Stateless request handling - any instance can serve any request
-- NFR14: Database operations are simple key-value lookups (O(1) by secret ID)
-- NFR15: Horizontal scaling possible by adding container instances behind a load balancer
-- NFR16: Storage grows linearly with active (unexpired) secrets only - expired secrets are cleaned up
-- NFR17: Single small VPS (1-2 GB RAM) handles typical usage; scales horizontally for worldwide adoption
+- NFR-14: System supports thousands of concurrent users worldwide
+- NFR-15: Stateless request handling - any instance can serve any request
+- NFR-16: Database operations are simple key-value lookups (O(1) by secret ID)
+- NFR-17: Horizontal scaling possible by adding container instances behind a load balancer
+- NFR-18: Storage grows linearly with active (unexpired) secrets only - expired secrets are cleaned up
+- NFR-19: Single small VPS (1-2 GB RAM) handles typical usage; scales horizontally for worldwide adoption
+
+**Observability:**
+- NFR-20: Health and telemetry surfaces exist for operating an instance and carry no secret-derived data
 
 ### Additional Requirements
 
@@ -104,21 +116,25 @@ This document provides the complete epic and story breakdown for Securer, decomp
 - xUnit for testing framework
 
 **From UX Design:**
-- Split layout: gradient info panel (left) + glass card form (right) for sender page
-- Centered minimal layout for recipient/dead-end views
-- Inter font (primary) + JetBrains Mono (monospace for secrets)
-- Color system: Indigo 500 accent (#6366F1), Emerald 500 success, Red 500 error, Amber 500 warning
+
+Visual decisions are owned by `DESIGN.md` and behavioral decisions by `EXPERIENCE.md` in the UX run folder; both win over any mock. Token names below are `DESIGN.md` references.
+
+- Split layout: gradient info panel (`{components.split-panel}`, left) + glass card form (`{components.glass-card}`, right) for the sender page
+- Centered minimal layout for recipient and dead-end views — no glass treatment on recipient surfaces
+- `{typography.body.fontFamily}` Inter for interface text, `{typography.mono.fontFamily}` JetBrains Mono for all user data (secret input, revealed secret, generated URL)
+- Color system: `{colors.accent}` #6366F1 indigo accent, `{colors.success}` emerald confirmation, `{colors.error}` red for incorrect password and validation only, `{colors.warning}` amber reserved for irreversible destruction
+- Dead-end screen uses neutral `{colors.text-tertiary}` with no error styling — it is a terminal state, not an error
 - WCAG 2.1 Level AA accessibility compliance
 - Keyboard navigation: full tab-through, Enter submits, Escape closes dialogs
 - Screen reader support: semantic HTML, aria-live regions, proper ARIA roles
-- Visible focus indicators (2px indigo ring)
-- prefers-reduced-motion support — disable animations for users who prefer it
+- Visible focus indicators (indigo border plus 3px indigo glow at 10% opacity)
+- prefers-reduced-motion support - disable animations for users who prefer it
 - Desktop-first responsive: info panel hidden on mobile (<768px)
-- Glass card effect with backdrop-filter blur, with solid white fallback
+- Glass card effect with backdrop-filter blur behind `@supports`, solid white fallback
 - 44px minimum touch targets on mobile
 - No information conveyed by color alone
-- Auto-copy to clipboard on link generation
-- Confirmation dialog before secret reveal (role="alertdialog")
+- Auto-copy to clipboard on link generation, with a visible link and manual copy fallback
+- Confirmation dialog before secret reveal (role="alertdialog") - the only dialog in the product
 - Toast notification for clipboard confirmation (auto-dismiss 3s)
 - Countdown timer with auto-clear after reveal (cosmetic)
 - Form validation on submit only, not on blur
@@ -127,48 +143,48 @@ This document provides the complete epic and story breakdown for Securer, decomp
 
 | FR | Epic | Description |
 |---|---|---|
-| FR1 | Epic 1 | Secret text input |
-| FR2 | Epic 1 | Expiration selection |
-| FR3 | Epic 1 | Password input |
-| FR4 | Epic 1 | Random password generator |
-| FR5 | Epic 1 | Password-in-link option |
-| FR6 | Epic 1 | Unique link generation |
-| FR7 | Epic 1 | Auto-copy to clipboard |
-| FR8 | Epic 2 | Password prompt on link open |
-| FR9 | Epic 2 | Password-in-link bypass |
-| FR10 | Epic 2 | Confirmation before reveal |
-| FR11 | Epic 2 | View decrypted content |
-| FR12 | Epic 2 | Copy revealed secret |
-| FR13 | Epic 2 | Destroy after single view |
-| FR14 | Epic 3 | Auto-expire unclaimed secrets |
-| FR15 | Epic 3 | Destroy on failed attempt exhaustion |
-| FR16 | Epic 3 | Track remaining attempts |
-| FR17 | Epic 1 | Server-side encryption |
-| FR18 | Epic 1 | Store only ciphertext |
-| FR19 | Epic 2 | Decrypt in memory at retrieval |
-| FR20 | Epic 2 | Discard plaintext/password after use |
-| FR21 | Epic 3 | Identical generic error message |
-| FR22 | Epic 3 | No information leakage |
-| FR23 | Epic 4 | Docker single-command deploy |
-| FR24 | Epic 4 | Environment variable config |
+| FR-1 | Epic 1 | Secret text input |
+| FR-2 | Epic 1 | Expiration selection |
+| FR-3 | Epic 1 | Password input |
+| FR-4 | Epic 1 | Random password generator |
+| FR-5 | Epic 1 | Password-in-link option |
+| FR-6 | Epic 1 | Unique link generation |
+| FR-7 | Epic 1 | Auto-copy to clipboard |
+| FR-8 | Epic 2 | Password prompt on link open |
+| FR-9 | Epic 2 | Password-in-link bypass |
+| FR-10 | Epic 2 | Confirmation before reveal |
+| FR-11 | Epic 2 | View decrypted content |
+| FR-12 | Epic 2 | Copy revealed secret |
+| FR-13 | Epic 2 | Destroy after single view |
+| FR-14 | Epic 3 | Auto-expire unclaimed secrets |
+| FR-15 | Epic 3 | Destroy on failed attempt exhaustion |
+| FR-16 | Epic 3 | Track remaining attempts |
+| FR-17 | Epic 1 | Server-side encryption |
+| FR-18 | Epic 1 | Store only ciphertext |
+| FR-19 | Epic 2 | Decrypt in memory at retrieval |
+| FR-20 | Epic 2 | Discard plaintext/password after use |
+| FR-21 | Epic 3 | Identical generic error message |
+| FR-22 | Epic 3 | No information leakage |
+| FR-23 | Epic 4 | Docker single-command deploy |
+| FR-24 | Epic 4 | Environment variable config |
 
 ## Epic List
 
 ### Epic 1: Secret Creation
 A sender can paste a secret, set a password (or generate one), choose expiration, optionally include password in link, and get a shareable link auto-copied to clipboard. Includes project scaffolding, database setup, crypto service, create API endpoint, and full sender UI (split layout, glass card, form).
-**FRs covered:** FR1, FR2, FR3, FR4, FR5, FR6, FR7, FR17, FR18
+**FRs covered:** FR-1, FR-2, FR-3, FR-4, FR-5, FR-6, FR-7, FR-17, FR-18
 
 ### Epic 2: Secret Retrieval
 A recipient can open a shared link, enter a password (or bypass via password-in-link), see a confirmation warning, view the decrypted secret, and copy it. The secret is destroyed immediately after viewing. Completes the end-to-end secret sharing loop.
-**FRs covered:** FR8, FR9, FR10, FR11, FR12, FR13, FR19, FR20
+**FRs covered:** FR-8, FR-9, FR-10, FR-11, FR-12, FR-13, FR-19, FR-20
 
 ### Epic 3: Security Hardening & Lifecycle
 System enforces brute-force protection (limited attempts, secret burned on exhaustion), auto-expires unclaimed secrets via Cosmos DB TTL, and returns identical generic responses for all failure states. Adds security headers middleware and sensitive logging exclusions.
-**FRs covered:** FR14, FR15, FR16, FR21, FR22
+**FRs covered:** FR-14, FR-15, FR-16, FR-21, FR-22
 
 ### Epic 4: Deployment & Operations
 Administrator can deploy with a single command (Docker/Azure Container Apps), configure via environment variables, and have CI/CD pipeline and monitoring in place.
-**FRs covered:** FR23, FR24
+**FRs covered:** FR-23, FR-24
 
 ## Epic 1: Secret Creation
 
@@ -220,7 +236,7 @@ So that my secret is stored securely with zero-knowledge encryption.
 **Given** a valid `POST /api/secrets` request with `{ content, password, expirationMinutes, includePasswordInLink }`
 **When** the endpoint processes the request
 **Then** SecretService encrypts the content, stores a SecretDocument in Cosmos DB, and returns `{ secretId, expiresAt }`
-**And** plaintext and password are never persisted to storage (FR18)
+**And** plaintext and password are never persisted to storage (FR-18)
 **And** the document's TTL is set based on the selected expiration period
 
 **Given** an invalid request (missing content or password)
@@ -229,7 +245,7 @@ So that my secret is stored securely with zero-knowledge encryption.
 
 **Given** the encryption operation
 **When** it completes
-**Then** `Span<byte>` is used for sensitive data and all buffers are zeroed after use (FR17, FR20)
+**Then** `Span<byte>` is used for sensitive data and all buffers are zeroed after use (FR-17, FR-20)
 
 ### Story 1.3: Sender Page Layout & Form
 
@@ -246,10 +262,10 @@ So that creating a secret feels fast and trustworthy.
 
 **Given** the sender form
 **When** I inspect the form elements
-**Then** I see a textarea for secret text (FR1) with JetBrains Mono font and placeholder "Paste your secret here..."
-**And** a PasswordRow with password input and "Random" generator button (FR3, FR4)
-**And** an expiration dropdown with options: 1 hour, 24 hours (default), 7 days (FR2)
-**And** a "Include password in link" checkbox, unchecked by default (FR5)
+**Then** I see a textarea for secret text (FR-1) with JetBrains Mono font and placeholder "Paste your secret here..."
+**And** a PasswordRow with password input and "Random" generator button (FR-3, FR-4)
+**And** an expiration dropdown with options: 1 hour, 24 hours (default), 7 days (FR-2)
+**And** a "Include password in link" checkbox, unchecked by default (FR-5)
 **And** a "Create Secret Link" primary button (solid indigo, full-width)
 
 **Given** I click the "Random" password generator button
@@ -285,10 +301,10 @@ So that I can share the secret faster than pasting into Slack.
 **Given** the API returns a successful response with `{ secretId, expiresAt }`
 **When** the success state renders
 **Then** the form transitions to a SuccessPanel showing: success icon, heading, generated link (in JetBrains Mono), "Copied to clipboard" emerald badge, and expiration metadata
-**And** the link is automatically copied to clipboard via JS interop (`navigator.clipboard.writeText`) (FR7)
+**And** the link is automatically copied to clipboard via JS interop (`navigator.clipboard.writeText`) (FR-7)
 **And** a toast notification confirms "Copied to clipboard" (auto-dismiss 3s)
 
-**Given** the password-in-link checkbox was checked (FR5)
+**Given** the password-in-link checkbox was checked (FR-5)
 **When** the link is generated
 **Then** the password is embedded in the URL fragment (e.g., `/s/{id}#{password}`)
 **And** the fragment is included in the copied link
@@ -321,8 +337,8 @@ So that the secret is only ever accessible once and never lingers after viewing.
 **Given** a valid secret exists in Cosmos DB with matching ID
 **When** `POST /api/secrets/{id}/reveal` is called with the correct password
 **Then** SecretService looks up the document, derives the key using PBKDF2 with the stored salt, decrypts using AES-256-GCM with the stored IV
-**And** deletes the document from Cosmos DB immediately after successful decryption (FR13)
-**And** returns `{ content }` with the decrypted plaintext (FR11)
+**And** deletes the document from Cosmos DB immediately after successful decryption (FR-13)
+**And** returns `{ content }` with the decrypted plaintext (FR-11)
 
 **Given** a valid secret exists
 **When** `POST /api/secrets/{id}/reveal` is called with an incorrect password
@@ -331,7 +347,7 @@ So that the secret is only ever accessible once and never lingers after viewing.
 
 **Given** decryption completes (success or failure)
 **When** the operation finishes
-**Then** all sensitive buffers (plaintext, password, derived key) are cleared using `CryptographicOperations.ZeroMemory()` (FR19, FR20)
+**Then** all sensitive buffers (plaintext, password, derived key) are cleared using `CryptographicOperations.ZeroMemory()` (FR-19, FR-20)
 **And** no secret content, password, or ciphertext is written to logs
 
 **Given** a secret ID that does not exist in Cosmos DB
@@ -348,7 +364,7 @@ So that I can retrieve the secret securely.
 
 **Given** I open a valid secret link at `/s/{id}`
 **When** the page loads
-**Then** I see a minimal, centered layout with a password input field and a "View Secret" primary button (FR8)
+**Then** I see a minimal, centered layout with a password input field and a "View Secret" primary button (FR-8)
 **And** the page uses MinimalLayout (centered single-column, no split layout or glass effects)
 **And** the password field has focus on load
 
@@ -380,14 +396,14 @@ So that I don't accidentally burn a secret and can retrieve it with minimal fric
 
 **Given** the correct password has been verified (from Story 2.2 or password-in-link)
 **When** the confirmation step displays
-**Then** I see a dialog with amber warning: "This secret will be permanently deleted after you view it. Continue?" (FR10)
+**Then** I see a dialog with amber warning: "This secret will be permanently deleted after you view it. Continue?" (FR-10)
 **And** the dialog has "Continue" (primary button) and "Cancel" (secondary button)
 **And** the dialog uses `role="alertdialog"` with `aria-describedby` pointing to the warning text
 **And** Escape key or backdrop click cancels
 
 **Given** I click "Continue" on the confirmation dialog
 **When** the secret is revealed
-**Then** the SecretDisplay component shows the decrypted content in JetBrains Mono font with a copy button (FR11, FR12)
+**Then** the SecretDisplay component shows the decrypted content in JetBrains Mono font with a copy button (FR-11, FR-12)
 **And** a post-reveal amber banner states "This secret has been permanently deleted from the server"
 **And** a CountdownTimer displays "This page will auto-clear in Xs" with `aria-live="polite"` and `role="timer"`
 
@@ -400,7 +416,7 @@ So that I don't accidentally burn a secret and can retrieve it with minimal fric
 **Then** clipboard contains the secret text via JS interop
 **And** the button shows a checkmark with "Copied" confirmation
 
-**Given** I open a link with a password in the URL fragment (e.g., `/s/{id}#password`) (FR9)
+**Given** I open a link with a password in the URL fragment (e.g., `/s/{id}#password`) (FR-9)
 **When** the page loads
 **Then** JS interop (`fragment.js`) extracts the password from `window.location.hash`
 **And** the password prompt is skipped entirely
@@ -425,12 +441,12 @@ So that intercepted links cannot be brute-forced to reveal secrets.
 
 **Given** a secret is created with a `RemainingAttempts` field (default 3-5)
 **When** an incorrect password is submitted via `POST /api/secrets/{id}/reveal`
-**Then** the `RemainingAttempts` counter is decremented on the Cosmos DB document (FR16)
+**Then** the `RemainingAttempts` counter is decremented on the Cosmos DB document (FR-16)
 **And** the response includes `{ message: "Incorrect password", remainingAttempts: N }`
 
 **Given** a secret has 1 remaining attempt
 **When** another incorrect password is submitted
-**Then** the secret document is permanently deleted from Cosmos DB (FR15)
+**Then** the secret document is permanently deleted from Cosmos DB (FR-15)
 **And** all subsequent requests for that ID return `404 { message: "This secret is not available" }`
 
 **Given** a secret has been destroyed by attempt exhaustion
@@ -452,7 +468,7 @@ So that secrets have a limited shelf life and attackers gain zero information fr
 
 **Given** a secret is created with an expiration period (1h, 24h, or 7d)
 **When** the expiration time elapses
-**Then** Cosmos DB native TTL automatically deletes the document (FR14)
+**Then** Cosmos DB native TTL automatically deletes the document (FR-14)
 **And** no background job or application code is required for cleanup
 
 **Given** the Cosmos DB TTL configuration
@@ -462,8 +478,8 @@ So that secrets have a limited shelf life and attackers gain zero information fr
 
 **Given** any secret request fails for any reason (expired, already viewed, burned by attempts, nonexistent ID, any other error)
 **When** the API responds
-**Then** it returns `404 { message: "This secret is not available" }` (FR21)
-**And** no variation in status code, message, response time, or headers between different failure reasons (FR22)
+**Then** it returns `404 { message: "This secret is not available" }` (FR-21)
+**And** no variation in status code, message, response time, or headers between different failure reasons (FR-22)
 
 **Given** the SecurityHeadersMiddleware
 **When** any response is sent
@@ -476,7 +492,7 @@ So that secrets have a limited shelf life and attackers gain zero information fr
 
 **Given** the logging configuration
 **When** requests are made to `/api/secrets` endpoints
-**Then** request bodies are excluded from logs (NFR7, NFR8)
+**Then** request bodies are excluded from logs (NFR-7, NFR-8)
 **And** secret IDs, operation types, success/failure, and attempt counts ARE logged
 **And** secret content, passwords, and ciphertext are NEVER logged
 
@@ -494,12 +510,12 @@ So that I can get the app running in production without manual setup steps.
 
 **Given** the project repository
 **When** I run `docker-compose up` in the project root
-**Then** the application starts with all services (API, Web, database) running in containers (FR23)
+**Then** the application starts with all services (API, Web, database) running in containers (FR-23)
 **And** the app is accessible on the configured port
 
 **Given** environment variables for configuration
 **When** I set `PORT`, database connection string, and other operational settings
-**Then** the application uses those values without code changes (FR24)
+**Then** the application uses those values without code changes (FR-24)
 **And** default values work for a zero-config first deployment
 
 **Given** the `azure.yaml` manifest and Aspire app model
