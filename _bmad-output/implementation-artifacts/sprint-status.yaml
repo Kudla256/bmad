@@ -1,0 +1,58 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 09-07-2026 13:16
+last_updated: 09-07-2026 13:16
+project: Securer
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: backlog
+  1-1-project-foundation-data-layer: backlog
+  1-2-encryption-service-secret-creation-api: backlog
+  1-3-sender-page-layout-form: backlog
+  1-4-secret-creation-flow-success: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-reveal-api-endpoint: backlog
+  2-2-recipient-password-prompt-verification: backlog
+  2-3-confirmation-reveal-password-in-link: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-brute-force-protection-attempt-tracking: backlog
+  3-2-auto-expiration-uniform-error-handling: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-docker-azure-deployment: backlog
+  epic-4-retrospective: optional
