@@ -19,7 +19,11 @@ How the product works. `DESIGN.md` owns how it looks, and this file references i
 
 **Form factor.** Web, single-page, desktop-first. Senders are at a keyboard (UJ-1, UJ-3); Recipients open Links wherever they happen to be, frequently a phone (UJ-3, UJ-4). Both must work; neither is an afterthought.
 
-**UI system.** Tailwind CSS with shadcn/ui component primitives over Radix. Both spines inherit from it: `DESIGN.md` tokens extend the Tailwind theme, and this file specifies only the behavioral delta over Radix defaults. The system was chosen because it produces no recognizable framework look — a generic component-library appearance would undercut the trust the product depends on — and because Radix supplies keyboard handling, focus management and screen-reader semantics for the Dialog and Select without hand-rolling them.
+**UI system.** Blazor (InteractiveServer) with Tailwind CSS v4, no component library. Components are custom `.razor` files styled with Tailwind utilities; `DESIGN.md` tokens live in the Tailwind theme.
+
+This supersedes the React + Tailwind + shadcn/ui assumption these spines were originally drafted against — the architecture spine (`AD-21`) fixes Blazor InteractiveServer as the render mode, and the tooling half of the earlier UX decision does not survive that. What does survive is the reasoning: Tailwind was chosen because it produces no recognizable framework look, and a generic component-library appearance would undercut the trust this product depends on. That argument holds identically under Blazor, and rules out MudBlazor, Radzen and FluentUI Blazor for the same reason it ruled out Material and Bootstrap.
+
+The cost of dropping shadcn/Radix is real and lands here: the keyboard handling, focus management and screen-reader semantics that came free from Radix primitives are now this file's obligation. Every behavior in `## Accessibility Floor` must be implemented and tested rather than inherited — see the note under Component Patterns for the two components where that cost concentrates.
 
 **Visual identity.** `DESIGN.md`. Nothing here restates a color, size or radius.
 
@@ -63,11 +67,13 @@ Brand voice lives in `DESIGN.md`. This section governs microcopy.
 
 Visual specs are in `DESIGN.md.Components`. This section is behavior.
 
+Because there is no primitive library (see Foundation), the two components that would have come from Radix — the confirmation **dialog** and the expiration **select** — carry hand-written accessibility behavior. They are the highest-risk components in the product for an accessibility regression, and their requirements below are obligations rather than descriptions.
+
 **PasswordRow** — a Password input with a "Random" generator beside it. Activating the generator fills the field with a strong random Password (FR-4) and reveals it temporarily, because a Sender cannot share a Password they have never seen. Visibility is togglable; the field is `type="password"` by default. The generator button carries `aria-label="Generate random password"`. A generated value stays editable.
 
 **Secret textarea** — the dominant element on the Sender surface, in mono to signal that pasted content survives intact. Vertically resizable, never auto-shrinking below its minimum. Newlines, tabs and non-ASCII round-trip unchanged (FR-1).
 
-**Expiration select** — exactly three options; 24 hours preselected (FR-2). Radix Select, so keyboard and screen-reader behavior come from the primitive.
+**Expiration select** — exactly three options; 24 hours preselected (FR-2). With no primitive library (see Foundation), a native `<select>` is the default choice precisely because the platform supplies the keyboard and screen-reader behavior; a custom-styled listbox is only acceptable if it reimplements arrow-key navigation, type-ahead, `aria-activedescendant` and focus return, and is tested against them.
 
 **Password-in-link checkbox** — unchecked by default (FR-5). The default is the secure one; the convenience mode is always an explicit act.
 
