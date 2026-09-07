@@ -11,7 +11,7 @@ updated: 2026-09-04
 
 ## 0. Document Purpose
 
-This PRD is the requirements contract for Securer, written for the solo developer building it and for the downstream BMad workflows that consume it — `bmad-architecture`, `bmad-ux`, and `bmad-create-epics-and-stories`. It is Glossary-anchored: §3 defines every domain noun once, and §2, §4 and §9 use those terms verbatim with no synonyms. Features are grouped in §4 with their functional requirements nested and numbered globally as `FR-1`…`FR-24`, so epics and stories can reference a stable ID even if features are reorganised. User journeys carry global IDs `UJ-1`…`UJ-6` and are referenced inline from the FRs they realise; success metrics carry `SM-` IDs and name the FRs they validate. Inferences made without confirmation are tagged inline as `[ASSUMPTION: …]` and collected in §11.
+This PRD is the requirements contract for Securer, written for the solo developer building it and for the downstream BMad workflows that consume it — `bmad-architecture`, `bmad-ux`, and `bmad-create-epics-and-stories`. It is Glossary-anchored: §3 defines every domain noun once, and §2, §4 and §9 use those terms verbatim with no synonyms. Features are grouped in §4 with their functional requirements nested and numbered globally as `FR-1`…`FR-24`, so epics and stories can reference a stable ID even if features are reorganised. Cross-cutting non-functional requirements in §5 carry `NFR-1`…`NFR-20` on the same principle. User journeys carry global IDs `UJ-1`…`UJ-6` and are referenced inline from the FRs they realise; success metrics carry `SM-` IDs and name the FRs they validate. Inferences made without confirmation are tagged inline as `[ASSUMPTION: …]` and collected in §11.
 
 It builds on two upstream artifacts and does not duplicate them: the product brief at `../../briefs/brief-Securer-2026-02-12/brief.md` (with persona depth, deferral reasoning and the risk register in its `addendum.md`), and the brainstorming session at `../../../brainstorming/brainstorm-secret-drop-2026-02-12/`. UX decisions live downstream in `../../ux-designs/ux-Securer-2026-02-13/` (`DESIGN.md`, `EXPERIENCE.md`) and technical decisions in `../../architecture/architecture-Securer-2026-02-13/ARCHITECTURE-SPINE.md`; where those documents and this one disagree on a requirement, this PRD wins.
 
@@ -355,36 +355,37 @@ Instance Administrator can configure basic settings — port and database — vi
 
 ## 5. Cross-Cutting NFRs
 
-*System-wide quality attributes not tied to a single feature. Feature-specific NFRs stay nested under their feature in §4.*
+*System-wide quality attributes not tied to a single feature, numbered globally as `NFR-1`-`NFR-20` so epics and stories can reference them as stably as they reference FRs. Feature-specific NFRs stay nested under their feature in §4.*
 
 **Performance**
-- Page load completes in under 1 second on a standard broadband connection.
-- Secret creation — encryption plus storage — completes in under 500 ms server-side.
-- Secret retrieval — decryption plus delivery — completes in under 500 ms server-side.
-- The UI stays responsive during Link generation; no blocking work on the client thread.
-- The JavaScript payload stays minimal; the client is a thin form, not an application.
+- **NFR-1:** Page load completes in under 1 second on a standard broadband connection.
+- **NFR-2:** Secret creation — encryption plus storage — completes in under 500 ms server-side.
+- **NFR-3:** Secret retrieval — decryption plus delivery — completes in under 500 ms server-side.
+- **NFR-4:** The UI stays responsive during Link generation; no blocking work on the client thread.
+- **NFR-5:** The JavaScript payload stays minimal; the client is a thin form, not an application.
 
 **Security**
-- All client-server communication is over TLS. There is no plaintext transport path.
-- Nothing logs Secret content, Passwords, or decrypted data at any point, on any path, including error and exception handlers.
-- Request bodies on the Secret creation and retrieval endpoints are never logged.
-- Passwords are never written to disk, logs, or any persistent store.
-- A failed Password submission reveals nothing about whether the Secret exists (see FR-21, FR-22).
-- URL fragments used by password-in-link mode are never transmitted to the server by the browser.
+- **NFR-6:** All client-server communication is over TLS. There is no plaintext transport path.
+- **NFR-7:** Nothing logs Secret content, Passwords, or decrypted data at any point, on any path, including error and exception handlers.
+- **NFR-8:** Request bodies on the Secret creation and retrieval endpoints are never logged.
+- **NFR-9:** Passwords are never written to disk, logs, or any persistent store.
+- **NFR-10:** A failed Password submission reveals nothing about whether the Secret exists (see FR-21, FR-22).
+- **NFR-11:** URL fragments used by password-in-link mode are never transmitted to the server by the browser.
 
 **Reliability**
-- Destruction is authoritative: once a destruction trigger has fired for a Secret, no later request may observe it, regardless of storage cleanup timing.
-- A Reveal either delivers the Secret and destroys the record, or does neither. It must not be possible to display a Secret that survives.
+- **NFR-12:** Destruction is authoritative: once a destruction trigger has fired for a Secret, no later request may observe it, regardless of storage cleanup timing.
+- **NFR-13:** A Reveal either delivers the Secret and destroys the record, or does neither. It must not be possible to display a Secret that survives.
 
 **Scalability**
-- Request handling is stateless; any Instance replica can serve any request.
-- Storage access for a Secret is a single key lookup by identifier — O(1), no scans.
-- Horizontal scaling is achieved by adding replicas behind a load balancer, with no coordination between them.
-- Storage grows only with active, unexpired Secrets; expired records are removed rather than accumulated.
-- A single small VPS (1-2 GB RAM) handles typical single-team usage.
+- **NFR-14:** The system supports thousands of concurrent users worldwide.
+- **NFR-15:** Request handling is stateless; any Instance replica can serve any request.
+- **NFR-16:** Storage access for a Secret is a single key lookup by identifier — O(1), no scans.
+- **NFR-17:** Horizontal scaling is achieved by adding replicas behind a load balancer, with no coordination between them.
+- **NFR-18:** Storage grows only with active, unexpired Secrets; expired records are removed rather than accumulated.
+- **NFR-19:** A single small VPS (1-2 GB RAM) handles typical single-team usage.
 
 **Observability**
-- Health and telemetry surfaces exist for operating an Instance, and carry no Secret-derived data — no content, no Passwords, no identifiers that would let an operator correlate Secret activity.
+- **NFR-20:** Health and telemetry surfaces exist for operating an Instance, and carry no Secret-derived data — no content, no Passwords, no identifiers that would let an operator correlate Secret activity.
 
 ## 6. Platform and Constraints
 
